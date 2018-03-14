@@ -1,11 +1,8 @@
-
-
 node_modules 用yarn 装 不要用 npm
-
 
 code push 自动化发布 （node.js）
 node codepush.js     默认ios平台
-node codepush.js ios cp899 
+node codepush.js ios cp899
 
 
 -- bug 修复 发布命令
