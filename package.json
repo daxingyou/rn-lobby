@@ -1,0 +1,54 @@
+{
+  "name": "hatsune",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest",
+    "postinstall": "remotedev-debugger --hostname localhost --port 5678 --injectserver",
+    "lint": "eslint app/.; exit 0",
+    "fix": "eslint --fix app/.; exit 0"
+  },
+  "dependencies": {
+    "immutable": "^3.8.1",
+    "md5": "^2.2.1",
+    "prop-types": "^15.6.0",
+    "react": "^15.4.1",
+    "react-native": "^0.39.0",
+    "react-native-checkbox": "^1.0.15",
+    "react-native-code-push": "^1.16.0-beta",
+    "react-native-datepicker": "^1.6.0",
+    "react-native-device-info": "^0.9.7",
+    "react-native-fetch-blob": "^0.10.2",
+    "react-native-fs": "2.0.1-rc.2",
+    "react-native-keychain": "^0.3.2",
+    "react-native-looped-carousel": "^0.1.7",
+    "react-native-modalbox": "^1.4.2",
+    "react-native-root-toast": "^1.0.3",
+    "react-native-scrollable-tab-view": "^0.6.0",
+    "react-native-shake-event": "^2.0.0",
+    "react-native-sound": "^0.8.3",
+    "react-native-tab-navigator": "^0.3.3",
+    "react-native-umeng-push": "^1.0.5",
+    "react-native-webp": "^0.3.1",
+    "react-navigation": "1.0.0-beta.11",
+    "react-redux": "^4.4.5",
+    "redux": "^3.6.0",
+    "redux-persist": "^5.3.5",
+    "redux-thunk": "^2.1.0",
+    "xdate": "^0.8.2"
+  },
+  "jest": {
+    "preset": "jest-react-native"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.0.3",
+    "babel-preset-react-native": "^4.0.0",
+    "eslint": "^4.13.1",
+    "eslint-plugin-react": "^7.5.1",
+    "eslint-plugin-react-native": "^3.2.0",
+    "jest": "^21.2.1",
+    "remote-redux-devtools": "^0.5.12",
+    "remote-redux-devtools-on-debugger": "^0.8.3"
+  }
+}

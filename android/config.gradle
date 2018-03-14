@@ -1,0 +1,678 @@
+ext {
+    global = [
+            "CONFIG_SOURCE_DIR": '../../multiChannel/',
+            "CONFIG_DIST_DIR"  : '../../app/config/'
+    ]
+    test = [
+            "applicationId"       : 'com.cp.hatsunetest',
+            "CODE_PUSH_KEY"       : "QRTM2aihl6XjQIUNyRovK44rdhty4ksvOXqog",
+            'UMENG_APPKEY'        : '58a8141a677baa3aed001f0b',
+            'UMENG_MESSAGE_SECRET': '5bb6d909ea5ba391ef5534b44bf45cfe',
+            'CONFIG_DIR'          : 'test'
+    ]
+    feature1 = [
+            "applicationId"       : 'com.cp.feature1',
+            "CODE_PUSH_KEY"       : "0mq9izXKY1bdsX5iTMIlqD4rPSz44ksvOXqog",
+            'UMENG_APPKEY'        : '58a8141a677baa3aed001f0b',
+            'UMENG_MESSAGE_SECRET': '5bb6d909ea5ba391ef5534b44bf45cfe',
+            'CONFIG_DIR'          : 'feature1'
+    ]
+    stable = [
+            "applicationId"       : 'com.cp.stable',
+            "CODE_PUSH_KEY"       : "cPr22hKAAzttVAouLw4qxD0AN8nP4ksvOXqog",
+            'UMENG_APPKEY'        : '58a8141a677baa3aed001f0b',
+            'UMENG_MESSAGE_SECRET': '5bb6d909ea5ba391ef5534b44bf45cfe',
+            'CONFIG_DIR'          : 'stable'
+    ]
+    feature4 = [
+            "applicationId"       : 'com.cp.feature4',
+            "CODE_PUSH_KEY"       : "vbXJEyoyHybWA8qswX7mG2NPiqk34ksvOXqog",
+            'UMENG_APPKEY'        : '58a8141a677baa3aed001f0b',
+            'UMENG_MESSAGE_SECRET': '5bb6d909ea5ba391ef5534b44bf45cfe',
+            'CONFIG_DIR'          : 'feature4'
+    ]
+    kosun = [
+            "applicationId"       : 'com.cp.kosun',
+            "CODE_PUSH_KEY"       : "i0sUazFNyPKnvxMprun2PEpX7imd4ksvOXqog",
+            'UMENG_APPKEY'        : '58cfd742677baa25be00209f',
+            'UMENG_MESSAGE_SECRET': '4f4fbb9a9514c79772ee1669819475eb',
+            'CONFIG_DIR'          : 'kosun'
+    ]
+    cp899 = [
+            "applicationId"       : 'com.hatsune',
+            "CODE_PUSH_KEY"       : "3njVth2ioBV6evT4nnd2VUcBrqov4ksvOXqog",
+            'UMENG_APPKEY'        : '58a8141a677baa3aed001f0b',
+            'UMENG_MESSAGE_SECRET': '5bb6d909ea5ba391ef5534b44bf45cfe',
+            'CONFIG_DIR'          : 'cp899'
+    ]
+    c9 = [
+            "applicationId"       : 'com.cp.c9',
+            "CODE_PUSH_KEY"       : "VzB4iubqHtgvDKIYaKq1zRaLLEgc4ksvOXqof",
+            'UMENG_APPKEY'        : '58b4190de88bad448f0020ba',
+            'UMENG_MESSAGE_SECRET': '704d714def101f7b9784d0d298c3b920',
+            'CONFIG_DIR'          : 'c9'
+    ]
+    cpcp = [
+            "applicationId"       : 'com.cp.cpcp',
+            "CODE_PUSH_KEY"       : "Zkeo4VwBWvtC5ugGf2Q6J4hY5JLg4ksvOXqoe",
+            'UMENG_APPKEY'        : '58b417bbb27b0a607d002249',
+            'UMENG_MESSAGE_SECRET': '3d10fa8aca45575f206f0d4a2ec155f9',
+            'CONFIG_DIR'          : 'cpcp'
+    ]
+    cp111 = [
+            "applicationId"       : 'com.cp.cp111',
+            "CODE_PUSH_KEY"       : "OOqdt48g4riVr7XuRcifbYNg57DC4ksvOXqoc",
+            'UMENG_APPKEY'        : '58bacb95677baa1620000350',
+            'UMENG_MESSAGE_SECRET': '97e7b30da3bfdadda4bd559bbf75338f',
+            'CONFIG_DIR'          : 'cp111'
+    ]
+    cp500y = [
+            "applicationId"       : 'com.cp.cp500y',
+            "CODE_PUSH_KEY"       : "L2dzfdfNXkGV8yzjNMW1BUGA4oDKYD6GbGUlN",
+            'UMENG_APPKEY'        : '58bacbc9734be41be9000690',
+            'UMENG_MESSAGE_SECRET': '7ceebe072531d53229a7024831708f67',
+            'CONFIG_DIR'          : 'cp500y'
+    ]
+    cp500 = [
+            "applicationId"       : 'com.cp.cp500w',
+            "CODE_PUSH_KEY"       : "CILKcadgfDHHaItaPmvzQJ95dXH34ksvOXqod",
+            'UMENG_APPKEY'        : '58bfd256734be454dc001611',
+            'UMENG_MESSAGE_SECRET': '4ff8765a1b176c7fc01808b5231dfc9f',
+            'CONFIG_DIR'          : 'cp500'
+    ]
+    duocai = [
+            "applicationId"       : 'com.cp.duocai',
+            "CODE_PUSH_KEY"       : "hUa4SDcZwHAXRoxJ1YfopVMjQfrt6ksvOPqes",
+            'UMENG_APPKEY'        : '58ca89774ad1562148001fcb',
+            'UMENG_MESSAGE_SECRET': 'a931b4f14aace7d5b02b8e59b8ed5471',
+            'CONFIG_DIR'          : 'duocai'
+    ]
+    cp7070 = [
+            "applicationId"       : 'com.cp.cp7070',
+            "CODE_PUSH_KEY"       : "wo3LokNcSePBtIxAnXy2KLDhYsrX6ksvOPqes",
+            'UMENG_APPKEY'        : '58ca8b70bbea831c2f0018d9',
+            'UMENG_MESSAGE_SECRET': 'fd499efeebc478dcd1716c0483ec7c12',
+            'CONFIG_DIR'          : 'cp7070'
+    ]
+    cp555 = [
+            "applicationId"       : 'com.cp.cp555',
+            "CODE_PUSH_KEY"       : "s1X0ySDAySHkjadzdDihjKbmTFVP6ksvOPqes",
+            'UMENG_APPKEY'        : '58ca8bb3677baa1a260018f2',
+            'UMENG_MESSAGE_SECRET': 'e616261679cc2c7ee480b8a233bb1f80',
+            'CONFIG_DIR'          : 'cp555'
+    ]
+    tcw = [
+            "applicationId"       : 'com.cp.tcw',
+            "CODE_PUSH_KEY"       : "Iu6hx0OmPGPlzDGvG0XJMrMaxd3w6ksvOPqes",
+            'UMENG_APPKEY'        : '58ca8c22677baa6189000022',
+            'UMENG_MESSAGE_SECRET': '0cfa70a7747b73c8a313e60dabe67a99',
+            'CONFIG_DIR'          : 'tcw'
+    ]
+    yccp = [
+            "applicationId"       : 'com.cp.yccp',
+            "CODE_PUSH_KEY"       : "jdohIEdOFyhHfXyTrhUt67MnJK236ksvOPqes",
+            'UMENG_APPKEY'        : '58ca8c7dbbea831c320018c6',
+            'UMENG_MESSAGE_SECRET': '1602814b447dd0e14e5e928c7111a2d3',
+            'CONFIG_DIR'          : 'yccp'
+    ]
+    cp500w = [
+            "applicationId"       : 'com.cp.cp500w30',
+            "CODE_PUSH_KEY"       : "Z9ncyKL50IrXYXmwl6fxqHqFDlkX6ksvOPqes",
+            'UMENG_APPKEY'        : '58ca8cd53eae253d76001b00',
+            'UMENG_MESSAGE_SECRET': '540e781008b509b191aa63a73770adfa',
+            'CONFIG_DIR'          : 'cp500w'
+    ]
+    cp8888 = [
+            "applicationId"       : 'com.cp.cp8888',
+            "CODE_PUSH_KEY"       : "DWluuJI9Wy47cZHhORNednW2Veu26ksvOPqes",
+            'UMENG_APPKEY'        : '58da5af3734be46bed001db4',
+            'UMENG_MESSAGE_SECRET': '54f09e56cf163ea9143eba5a2b34f047',
+            'CONFIG_DIR'          : 'cp8888'
+    ]
+    lccp = [
+            "applicationId"       : 'com.cp.lccp',
+            "CODE_PUSH_KEY"       : "oipaNJNkqJg3YWXNoji1AlAN1Y3w6ksvOPqes",
+            'UMENG_APPKEY'        : '58cfa3c8734be469f0001efc',
+            'UMENG_MESSAGE_SECRET': 'af8b741fa74aa9b647614bd492777acf',
+            'CONFIG_DIR'          : 'lccp'
+    ]
+    cp88 = [
+            "applicationId"       : 'com.cp.cp88',
+            "CODE_PUSH_KEY"       : "con7OCaiLZ3eW8ka6zuTT7LUzCXJ6ksvOPqes",
+            'UMENG_APPKEY'        : '58cfa40a8f4a9d1c4500180d',
+            'UMENG_MESSAGE_SECRET': 'f9cd0264dc1b5c22c739bb14b2d3261a',
+            'CONFIG_DIR'          : 'cp88'
+    ]
+    cp361 = [
+            "applicationId"       : 'com.cp.cp361',
+            "CODE_PUSH_KEY"       : "jl0qjiaVqp21hHmir9jPqYxGn8Wm6ksvOPqes",
+            'UMENG_APPKEY'        : '58cfa430f43e486fbb000bfb',
+            'UMENG_MESSAGE_SECRET': '97ab71cf5291ee9b87c97c96c3957a3d',
+            'CONFIG_DIR'          : 'cp361'
+    ]
+    c02 = [
+            "applicationId"       : 'com.cp.c02',
+            "CODE_PUSH_KEY"       : "4pWmHKkUPKHy8S0hn7vratjB18gH6ksvOPqes",
+            'UMENG_APPKEY'        : '58e5e0c6f43e484ac80013df',
+            'UMENG_MESSAGE_SECRET': '639bcc4c0d23340f4a0264afc12f4e1b',
+            'CONFIG_DIR'          : 'c02'
+    ]
+    cp99 = [
+            "applicationId"       : 'com.cp.cp99',
+            "CODE_PUSH_KEY"       : "lV3NFi0LDAgpqP8k309sLK56F3956ksvOPqes",
+            'UMENG_APPKEY'        : '58f4ba93734be42072000b26',
+            'UMENG_MESSAGE_SECRET': '140c7754480ce23cec683ab6153ec74f',
+            'CONFIG_DIR'          : 'cp99'
+    ]
+    c29 = [
+            "applicationId"       : 'com.cp.c29',
+            "CODE_PUSH_KEY"       : "MOi99DxyEJ3k014HmrtGZh0uVomB6ksvOPqes",
+            'UMENG_APPKEY'        : '58f4bbe7ae1bf834da0015d5',
+            'UMENG_MESSAGE_SECRET': 'cfbf17ebbd3a2173b8e942452280c916',
+            'CONFIG_DIR'          : 'c29'
+    ]
+    yicaicp = [
+            "applicationId"       : 'com.cp.yicaicp',
+            "CODE_PUSH_KEY"       : "foRtfrnFmbN2JG1waqoT11h8XApx6ksvOPqes",
+            'UMENG_APPKEY'        : '58f4bc782ae85b1ac5001c7f',
+            'UMENG_MESSAGE_SECRET': 'd8a8a412b23380fa585d66c6aaf4dd19',
+            'CONFIG_DIR'          : 'yicaicp'
+    ]
+    cp500w2 = [
+            "applicationId"       : 'com.cp.cp500w2',
+            "CODE_PUSH_KEY"       : "eoPybrwYXiX6efAp3VraXIYbuDZ16ksvOPqes",
+            'UMENG_APPKEY'        : '58f4bcdea40fa35787000262',
+            'UMENG_MESSAGE_SECRET': 'e17e3e70eac96acac58c13eb0a540182',
+            'CONFIG_DIR'          : 'cp500w2'
+    ]
+    cp500w3 = [
+            "applicationId"       : 'com.cp.cp500w3',
+            "CODE_PUSH_KEY"       : "iTtR7NEHnhRTfcFBsb5XNbgCBfZH6ksvOPqes",
+            'UMENG_APPKEY'        : '5958e3fb310c930f9e0016fe',
+            'UMENG_MESSAGE_SECRET': '886ac5fdd57769507ac4d3e20b560960',
+            'CONFIG_DIR'          : 'cp500w3'
+    ]
+    ssc = [
+            "applicationId"       : 'com.cp.ssc',
+            "CODE_PUSH_KEY"       : "Ybdgel0EGFckmVNJIaEzLssk8z1w6ksvOPqes",
+            'UMENG_APPKEY'        : '58f4bd5f07fe6503f7001f65',
+            'UMENG_MESSAGE_SECRET': '127e2b71a7d1eff4c6de85e06cf2306e',
+            'CONFIG_DIR'          : 'ssc'
+    ]
+    xyc = [
+            "applicationId"       : 'com.cp.xyc',
+            "CODE_PUSH_KEY"       : "JiypngWnuT1K2el6BB7B65VsUidh6ksvOPqes",
+            'UMENG_APPKEY'        : '58f4bdc345297d4cc6001a79',
+            'UMENG_MESSAGE_SECRET': 'ea7af1483fcc5eb92eca2b2ab6b81194',
+            'CONFIG_DIR'          : 'xyc'
+    ]
+    cp9a = [
+            "applicationId"       : 'com.cp.cp9a',
+            "CODE_PUSH_KEY"       : "JDiS3fPSfNtGmsfKlPHPHrADRNO76ksvOPqes",
+            'UMENG_APPKEY'        : '58f4be3f4ad1561a04001e35',
+            'UMENG_MESSAGE_SECRET': '95f66a0636beeada77f4aa958425327e',
+            'CONFIG_DIR'          : 'cp9a'
+    ]
+    cp336 = [
+            "applicationId"       : 'com.cp.cp336',
+            "CODE_PUSH_KEY"       : "IGFZnfcN3lZiTMU442nN6xLnB12t6ksvOPqes",
+            'UMENG_APPKEY'        : '5922ec84f29d983140000248',
+            'UMENG_MESSAGE_SECRET': '616893539f9209d487e219224a4a0d88',
+            'CONFIG_DIR'          : 'cp336'
+    ]
+    cp500x2 = [
+            "applicationId"       : 'com.cp.cp500x2',
+            "CODE_PUSH_KEY"       : "dFnWDRZOBfBBnWfhMVax8Gi6KU3N6ksvOPqes",
+            'UMENG_APPKEY'        : '5927de7a4544cb65df0000bc',
+            'UMENG_MESSAGE_SECRET': 'b9acd31bf6e90ef9322b886b3c2a2132',
+            'CONFIG_DIR'          : 'cp500x2'
+    ]
+    cp500x3 = [
+            "applicationId"       : 'com.cp.cp500x3',
+            "CODE_PUSH_KEY"       : "KGi81E2q2KZRBAFB7DsOxTbvUCbl6ksvOPqes",
+            'UMENG_APPKEY'        : '592e836bae1bf827330014f8',
+            'UMENG_MESSAGE_SECRET': '7322a51041bb45c2a79bb8b9cc89704d',
+            'CONFIG_DIR'          : 'cp500x3'
+    ]
+    cp500x4 = [
+            "applicationId"       : 'com.cp.cp500x4',
+            "CODE_PUSH_KEY"       : "PiwHTGC356TAUgG0vqtmRiNbV2dG6ksvOPqes",
+            'UMENG_APPKEY'        : '593285f3a325110516000da8',
+            'UMENG_MESSAGE_SECRET': '62c147b6b4010a01b8f9b1128e4ea3bc',
+            'CONFIG_DIR'          : 'cp500x4'
+    ]
+    shunfengcp = [
+            "applicationId"       : 'com.cp.shunfengcp',
+            "CODE_PUSH_KEY"       : "HyNfwS0P0CAIua3AIUvOCk0YIjCs6ksvOPqes",
+            'UMENG_APPKEY'        : '59327de075ca35726e0007c7',
+            'UMENG_MESSAGE_SECRET': '08448342ddbf217fdbe2f6a1a6c70bb5',
+            'CONFIG_DIR'          : 'shunfengcp'
+    ]
+    cp361x2 = [
+            "applicationId"       : 'com.cp.cp361x2',
+            "CODE_PUSH_KEY"       : "ShiutI4AINUmz6DhoE2vo2E3hrUZ6ksvOPqes",
+            'UMENG_APPKEY'        : '59478e2b7f2c746ff6001fc9',
+            'UMENG_MESSAGE_SECRET': '91d2b692e9c3e7925b69b688c728ec09',
+            'CONFIG_DIR'          : 'cp361x2'
+    ]
+    cp1516 = [
+            "applicationId"       : 'com.cp.cp1516',
+            "CODE_PUSH_KEY"       : "do96kUGsBgJ6CFC23Us4t0YyTk716ksvOPqes",
+            'UMENG_APPKEY'        : '5958cfb25312dd4dd6000e1f',
+            'UMENG_MESSAGE_SECRET': 'c8b6df0ee9ef93221eaede4015ec981d',
+            'CONFIG_DIR'          : 'cp1516'
+    ]
+    cp916 = [
+            "applicationId"       : 'com.cp.cp916',
+            "CODE_PUSH_KEY"       : "kQWL7Yzxrz9hEmjGk2mC99ERrX7a6ksvOPqes",
+            'UMENG_APPKEY'        : '596888a49f06fd5073000df3',
+            'UMENG_MESSAGE_SECRET': 'd6304fa91b2fa4916944c7cf39d5541f',
+            'CONFIG_DIR'          : 'cp916'
+    ]
+    c81 = [
+            "applicationId"       : 'com.cp.c81',
+            "CODE_PUSH_KEY"       : "OHUwO0udieC2vrxvEZ1MFub8QJO86ksvOPqes",
+            'UMENG_APPKEY'        : '59697bb665b6d6365e0017e0',
+            'UMENG_MESSAGE_SECRET': '9ba23ee07ad6bdb2f1f6537111677467',
+            'CONFIG_DIR'          : 'c81'
+    ]
+    wmcp = [
+            "applicationId"       : 'com.cp.c79',
+            "CODE_PUSH_KEY"       : "WVLF2Wr5B3m7PXEZ3xRoTX6aQZ1o6ksvOPqes",
+            'UMENG_APPKEY'        : '597b33008630f532e1001281',
+            'UMENG_MESSAGE_SECRET': '6a23635aaa03e4f13bf6539e441b9a9a',
+            'CONFIG_DIR'          : 'wmcp'
+    ]
+    shunfengcp3 = [
+            "applicationId"       : 'com.cp.shunfengcp3',
+            "CODE_PUSH_KEY"       : "ShiutI4AINUmz6DhoE2vo2E3hrUZ6ksvOPqes",
+            'UMENG_APPKEY'        : '598ad5b799f0c72854000e78',
+            'UMENG_MESSAGE_SECRET': '1b777a6c454ac33621ce038a39b64a98',
+            'CONFIG_DIR'          : 'shunfengcp3'
+    ]
+    zcp = [
+            "applicationId"       : 'com.cp.zcp',
+            "CODE_PUSH_KEY"       : "vEipa5A3yBNOIljkxPsPAGldHpXq6ksvOPqes",
+            'UMENG_APPKEY'        : '599595a476661324ad0003e4',
+            'UMENG_MESSAGE_SECRET': 'c491c78a44899b77a4c03e8acb0dd278',
+            'CONFIG_DIR'          : 'zcp'
+    ]
+    c222 = [
+            "applicationId"       : 'com.cp.c222',
+            "CODE_PUSH_KEY"       : "8FNCVa4u5xm2nEh3dB6qg8y5oZep6ksvOPqes",
+            'UMENG_APPKEY'        : '599595c945297d699c000e2c',
+            'UMENG_MESSAGE_SECRET': 'de8aacf61b7654fff07c86f683f9329f',
+            'CONFIG_DIR'          : 'c222'
+    ]
+    cp5050 = [
+            "applicationId"       : 'com.cp.cp5050',
+            "CODE_PUSH_KEY"       : "92plb4fTcLngHFnAgmTlsIkye72N6ksvOPqes",
+            'UMENG_APPKEY'        : '59a146aacae7e74316000972',
+            'UMENG_MESSAGE_SECRET': 'bb866c6b381700f7d32a1c50436e1b0d',
+            'CONFIG_DIR'          : 'cp5050'
+    ]
+    zgc = [
+            "applicationId"       : 'com.cp.zgc',
+            "CODE_PUSH_KEY"       : "EprQhVvFr0gyyWBtFCVb3aLqwFX76ksvOPqes",
+            'UMENG_APPKEY'        : '59a14bcc7f2c7432d9000b90',
+            'UMENG_MESSAGE_SECRET': '228f704a9f15e936a5069199f3bfaf3d',
+            'CONFIG_DIR'          : 'zgc'
+    ]
+    dfc = [
+            "applicationId"       : 'com.cp.dfc',
+            "CODE_PUSH_KEY"       : "apQcqgSTXevJ6hnK9WONY4KHRpvB6ksvOPqes",
+            'UMENG_APPKEY'        : '59b240da1061d258ca000c12',
+            'UMENG_MESSAGE_SECRET': '10aa556e8cdf2121fdd1d8bddea8c644',
+            'CONFIG_DIR'          : 'dfc'
+    ]
+    xyc3 = [
+            "applicationId"       : 'com.cp.xyc3',
+            "CODE_PUSH_KEY"       : "hUaGOpRJLFmny3Qb7cgJdDUUE1Fy6ksvOPqes",
+            'UMENG_APPKEY'        : '59b35ed2717c19204e001c69',
+            'UMENG_MESSAGE_SECRET': '098f89ce8edc8de72ce1a019aa36589f',
+            'CONFIG_DIR'          : 'xyc3'
+    ]
+    ncw = [
+            "applicationId"       : 'com.cp.ncw',
+            "CODE_PUSH_KEY"       : "Dc2dX68FvO3G3mSM3HPCY0sEC5Ps6ksvOPqes",
+            'UMENG_APPKEY'        : '59b392024ad15675ee001447',
+            'UMENG_MESSAGE_SECRET': '2180377cd026ac70db800774580e94e9',
+            'CONFIG_DIR'          : 'ncw'
+    ]
+    cp29x2 = [
+            "applicationId"       : 'com.cp.cp29x2',
+            "CODE_PUSH_KEY"       : "oVJ1T4vMs6FM7ckhM8SY3NBGUZok6ksvOPqes",
+            'UMENG_APPKEY'        : '59aa7ac23eae256f9b00153b',
+            'UMENG_MESSAGE_SECRET': '803b0981363f1e18ef1668eb387d5639',
+            'CONFIG_DIR'          : 'cp29x2'
+    ]
+    c6 = [
+            "applicationId"       : 'com.cp.c6',
+            "CODE_PUSH_KEY"       : "iIKnYGoRHq2j42DxegbuMTrnKIdE6ksvOPqes",
+            'UMENG_APPKEY'        : '59bc966645297d261600001d',
+            'UMENG_MESSAGE_SECRET': 'a30cd8021eca5327ee436971c0852a44',
+            'CONFIG_DIR'          : 'c6'
+    ]
+    wfccp = [
+            "applicationId"       : 'com.cp.wfccp',
+            "CODE_PUSH_KEY"       : "jpPnxlVebHJPlJ6CfxsmQrurSTnJ6ksvOPqes",
+            'UMENG_APPKEY'        : '59bc9f277f2c740621000031',
+            'UMENG_MESSAGE_SECRET': '28da3b4085730b675c68a0a3c3f38a7a',
+            'CONFIG_DIR'          : 'wfccp'
+    ]
+    xycp2 = [
+            "applicationId"       : 'com.cp.xycp2',
+            "CODE_PUSH_KEY"       : "tEN27BA0F6Lg1S2Rme3XNuaO7tN76ksvOPqes",
+            'UMENG_APPKEY'        : '59bcc3a85312dda933000013',
+            'UMENG_MESSAGE_SECRET': '37785c673bb4933262fdb248b56f32c9',
+            'CONFIG_DIR'          : 'xycp2'
+    ]
+    bycpw = [
+            "applicationId"       : 'com.cp.bycpw',
+            "CODE_PUSH_KEY"       : "Xd8YTQ5rPf904EBMtTHNTNHzFwuO6ksvOPqes",
+            'UMENG_APPKEY'        : '59bccc303eae25138e00000c',
+            'UMENG_MESSAGE_SECRET': '2d3d7531c62ae5e3dc528f7811eb7918',
+            'CONFIG_DIR'          : 'bycpw'
+    ]
+    cp7c = [
+            "applicationId"       : 'com.cp.cp7c',
+            "CODE_PUSH_KEY"       : "oDDy4SRwM3FP3CCchoYZp1HfE7kN6ksvOPqes",
+            'UMENG_APPKEY'        : '59c60b231061d2456b00019a',
+            'UMENG_MESSAGE_SECRET': 'e09cfcc29491835750a48a39611431c1',
+            'CONFIG_DIR'          : 'cp7c'
+    ]
+    c36 = [
+            "applicationId"       : 'com.cp.c36',
+            "CODE_PUSH_KEY"       : "sKupSAUfmMwHiYr9yIy7vIBelSkN6ksvOPqes",
+            'UMENG_APPKEY'        : '59c612e7bbea8304980001ed',
+            'UMENG_MESSAGE_SECRET': 'f08791c4dd3f1a999a6f7b061beb440d',
+            'CONFIG_DIR'          : 'c36'
+    ]
+    c48 = [
+            "applicationId"       : 'com.cp.c48',
+            "CODE_PUSH_KEY"       : "bPJU6P0ZkxQKRI4RNBsojc58VqqV6ksvOPqes",
+            'UMENG_APPKEY'        : '59c61d5f310c932e3a0001c7',
+            'UMENG_MESSAGE_SECRET': '0b21b43fcda5839cd1f31c33ecfeb466',
+            'CONFIG_DIR'          : 'c48'
+    ]
+    cp703 = [
+            "applicationId"       : 'com.cp.cp703',
+            "CODE_PUSH_KEY"       : "a1wGjcM7ddT8eHrrHtHrNmp2a0Iw6ksvOPqes",
+            'UMENG_APPKEY'        : '59d0667ac8957643bb000023',
+            'UMENG_MESSAGE_SECRET': '85230c11ac4d4b4321752d96882f309d',
+            'CONFIG_DIR'          : 'cp703'
+    ]
+    cpbw = [
+            "applicationId"       : 'com.cp.cpbw',
+            "CODE_PUSH_KEY"       : "ksHpmuTtI2GjLVHgKBlqHtMIJccC6ksvOPqes",
+            'UMENG_APPKEY'        : '59d0711dcae7e72ed800000d',
+            'UMENG_MESSAGE_SECRET': '5c25f08405f2e03a0641fbaa482f939d',
+            'CONFIG_DIR'          : 'cpbw'
+    ]
+    cp500w4 = [
+            "applicationId"       : 'com.cp.cp500w4',
+            "CODE_PUSH_KEY"       : "YSQ35TuAThM6cqDzBnMhGH8fJqNc6ksvOPqes",
+            'UMENG_APPKEY'        : '59d88833f5ade451a200014f',
+            'UMENG_MESSAGE_SECRET': '3456eba13a9e9a78aeceebea3b38fe52',
+            'CONFIG_DIR'          : 'cp500w4'
+    ]
+    cp1216 = [
+            "applicationId"       : 'com.cp.cp1216',
+            "CODE_PUSH_KEY"       : "E8mnfb4gTmgh3t9IERdANjLzcX7y6ksvOPqes",
+            'UMENG_APPKEY'        : '59e20050734be42d5b000028',
+            'UMENG_MESSAGE_SECRET': 'cb482e7a745ec2d15ea5c002bd551dac',
+            'CONFIG_DIR'          : 'cp1216'
+    ]
+    aicai = [
+            "applicationId"       : 'com.cp.aicai',
+            "CODE_PUSH_KEY"       : "KtVK5aUA2pDJ4H65EiT39UtRrTxA6ksvOPqes",
+            'UMENG_APPKEY'        : '59e700d9c62dca0ba40003e4',
+            'UMENG_MESSAGE_SECRET': '4c6d5943e082ce8dd5883ed2dc9a8a5d',
+            'CONFIG_DIR'          : 'aicai'
+    ]
+    zcw = [
+            "applicationId"       : 'com.cp.zcw',
+            "CODE_PUSH_KEY"       : "1YH8i8LTX7zLsFewTMStt3lK4yln6ksvOPqes",
+            'UMENG_APPKEY'        : '59ed9ad5677baa4d0a000342',
+            'UMENG_MESSAGE_SECRET': 'b905d0bb47c7673b26849247ee7583c9',
+            'CONFIG_DIR'          : 'zcw'
+    ]
+    c45 = [
+            "applicationId"       : 'com.cp.c45',
+            "CODE_PUSH_KEY"       : "hceoeHT73YkVZNG8gg5deJkouzom6ksvOPqes",
+            'UMENG_APPKEY'        : '59ed9f66a40fa32d09000bc5',
+            'UMENG_MESSAGE_SECRET': '4d7200f6b27bec87807b1e080b7d674d',
+            'CONFIG_DIR'          : 'c45'
+    ]
+    lequcai = [
+            "applicationId"       : 'com.cp.lequcai',
+            "CODE_PUSH_KEY"       : "EJ3CM32FLugQ1ek6VFcurK6iluf76ksvOPqes",
+            'UMENG_APPKEY'        : '59fdc8def43e485c60000335',
+            'UMENG_MESSAGE_SECRET': '631cf8d1ea089a3451fe3292d113d6ab',
+            'CONFIG_DIR'          : 'lequcai'
+    ]
+    cp3hao = [
+            "applicationId"       : 'com.cp.cp3hao',
+            "CODE_PUSH_KEY"       : "JQfhMts34hse8kE7cIWDfUd1TNpx6ksvOPqes",
+            'UMENG_APPKEY'        : '59fdcd69f43e484433000053',
+            'UMENG_MESSAGE_SECRET': 'f7c39e8cbfff428a9eab88e722822261',
+            'CONFIG_DIR'          : 'cp3hao'
+    ]
+    dayingjia2 = [
+            "applicationId"       : 'com.cp.dayingjia2',
+            "CODE_PUSH_KEY"       : "smYATO26ess1Jc3X0mWPVV3enoNc6ksvOPqes",
+            'UMENG_APPKEY'        : '59fdd0408f4a9d331b00006b',
+            'UMENG_MESSAGE_SECRET': '38cc88b6dd3352ca56be083fbe3e102c',
+            'CONFIG_DIR'          : 'dayingjia2'
+    ]
+    fuxingcai = [
+            "applicationId"       : 'com.cp.fuxingcai',
+            "CODE_PUSH_KEY"       : "a0EkQSn5YHlL1C67YuvG4nMi8cMU6ksvOPqes",
+            'UMENG_APPKEY'        : '5a02b3f2b27b0a3be1000170',
+            'UMENG_MESSAGE_SECRET': 'ad1b30ee93ca580db45194073fc8b629',
+            'CONFIG_DIR'          : 'fuxingcai'
+    ]
+    juxingcai = [
+            "applicationId"       : 'com.cp.juxingcai',
+            "CODE_PUSH_KEY"       : "HaZachZQxaMVuoUGPsExy58AL6oa6ksvOPqes",
+            'UMENG_APPKEY'        : '5a02bb4a734be4269f0000ec',
+            'UMENG_MESSAGE_SECRET': '62e70534b5038570ef4e43d6e8cd50ea',
+            'CONFIG_DIR'          : 'juxingcai'
+    ]
+    dayingjia = [
+            "applicationId"       : 'com.cp.dayingjia',
+            "CODE_PUSH_KEY"       : "vIGecUedbx69vrzVSr94Elw73nx56ksvOPqes",
+            'UMENG_APPKEY'        : '5a02c366f43e48097a0001b2',
+            'UMENG_MESSAGE_SECRET': '343560778c941fc3a6952f5bfd36a4a4',
+            'CONFIG_DIR'          : 'dayingjia'
+    ]
+    dayingjia3 = [
+            "applicationId"       : 'com.cp.dayingjia3',
+            "CODE_PUSH_KEY"       : "wUvmMrqjasxwcfbYmwGlBaIlFVL56ksvOPqes",
+            'UMENG_APPKEY'        : '5a02c9e9734be430a000010b',
+            'UMENG_MESSAGE_SECRET': '261066a94017bd85b007f6c6ff77d5e9',
+            'CONFIG_DIR'          : 'dayingjia3'
+    ]
+    c899 = [
+            "applicationId"       : 'com.cp.c899',
+            "CODE_PUSH_KEY"       : "ZMulkwfiOAoEXyqzsCihxFAeSIB06ksvOPqes",
+            'UMENG_APPKEY'        : '5a097928f43e48030b000036',
+            'UMENG_MESSAGE_SECRET': 'c84dc0ac520ce53308af6064e573b9db',
+            'CONFIG_DIR'          : 'c899'
+    ]
+    cp188 = [
+            "applicationId"       : 'com.cp.cp188',
+            "CODE_PUSH_KEY"       : "BVPT3Q3e3V3mLv40Dn8MCkSVpZta6ksvOPqes",
+            'UMENG_APPKEY'        : '5a0eac7af29d984c6800033c',
+            'UMENG_MESSAGE_SECRET': '6e9cded5e8f4d2b15cb7fe16b74ce8e1',
+            'CONFIG_DIR'          : 'cp188'
+    ]
+    diyicaipiao = [
+            "applicationId"       : 'com.cp.diyicaipiao',
+            "CODE_PUSH_KEY"       : "STBPxN5bvLhfJzkbY9SXU6F2wnNi6ksvOPqes",
+            'UMENG_APPKEY'        : '5a0eb206a40fa36576000077',
+            'UMENG_MESSAGE_SECRET': '4f62207b753ad53e5929db99a7aae907',
+            'CONFIG_DIR'          : 'diyicaipiao'
+    ]
+    dayingjia4 = [
+            "applicationId"       : 'com.cp.dayingjia4',
+            "CODE_PUSH_KEY"       : "AsABV8qQ3Lla1X7tAs6Vo80zy8v56ksvOPqes",
+            'UMENG_APPKEY'        : '5a0ebef3f29d987e47000167',
+            'UMENG_MESSAGE_SECRET': 'bf1f6bc3511b70076f631bd6bcbad607',
+            'CONFIG_DIR'          : 'dayingjia4'
+    ]
+    c76 = [
+            "applicationId"       : 'com.cp.c76',
+            "CODE_PUSH_KEY"       : "KLbA4FjKZZNLpIoCHwozffHlAyJt6ksvOPqes",
+            'UMENG_APPKEY'        : '5a0ecf89f29d985e610000a5',
+            'UMENG_MESSAGE_SECRET': 'a3e3ff681c10fadf982d9e7568e0c70e',
+            'CONFIG_DIR'          : 'c76'
+    ]
+    aicai2 = [
+            "applicationId"       : 'com.cp.aicai2',
+            "CODE_PUSH_KEY"       : "KZfkhkzUjv7YI6jNloPjQLECFWDy6ksvOPqes",
+            'UMENG_APPKEY'        : '5a0ed321f43e4842df0000b2',
+            'UMENG_MESSAGE_SECRET': 'cfd325f3150ed486d5abf2a152be371e',
+            'CONFIG_DIR'          : 'aicai2'
+    ]
+    cp588 = [
+            "applicationId"       : 'com.cp.cp588',
+            "CODE_PUSH_KEY"       : "clyEbNGgCk68yQUBew7HqB5MA2AB6ksvOPqes",
+            'UMENG_APPKEY'        : '5a0ed495a40fa3786f0001e7',
+            'UMENG_MESSAGE_SECRET': 'fcdbb8192c658c549393d795ec421ba5',
+            'CONFIG_DIR'          : 'cp588'
+    ]
+    cp55 = [
+            "applicationId"       : 'com.cp.cp55',
+            "CODE_PUSH_KEY"       : "1dxGkpfQR4d9eGBAYBFXIEcUCpMV6ksvOPqes",
+            'UMENG_APPKEY'        : '5a211a5f8f4a9d639f000229',
+            'UMENG_MESSAGE_SECRET': 'cae20ae5a2b7d007ba891d5b76c3b6f7',
+            'CONFIG_DIR'          : 'cp55'
+    ]
+    cp9 = [
+            "applicationId"       : 'com.cp.cp9',
+            "CODE_PUSH_KEY"       : "kZ2S2aC3885SliIFklQMSvnXvD9M6ksvOPqes",
+            'UMENG_APPKEY'        : '5a2164bff43e4845ea000312',
+            'UMENG_MESSAGE_SECRET': '22b5585b98dfdae89469caa14ed81a64',
+            'CONFIG_DIR'          : 'cp9'
+    ]
+    cp688 = [
+            "applicationId"       : 'com.cp.cp688',
+            "CODE_PUSH_KEY"       : "1hsXJZv2pJFGGR0nOL7rqHAyC17G6ksvOPqes",
+            'UMENG_APPKEY'        : '5a2167e3f43e480a1a000390',
+            'UMENG_MESSAGE_SECRET': 'f4d238031c23b9f4bbea7484de7a9559',
+            'CONFIG_DIR'          : 'cp688'
+    ]
+    gaoxingcp = [
+            "applicationId"       : 'com.cp.gaoxingcp',
+            "CODE_PUSH_KEY"       : "8Up9CHnCLENQgknIKEHhfmJLXwBd6ksvOPqes",
+            'UMENG_APPKEY'        : '5a2279708f4a9d4bfb00012e',
+            'UMENG_MESSAGE_SECRET': '997f31c5a241d0312e1f5922d2fa7405',
+            'CONFIG_DIR'          : 'gaoxingcp'
+    ]
+    xycp3 = [
+            "applicationId"       : 'com.cp.xycp3',
+            "CODE_PUSH_KEY"       : "H6reu60vsVfD7V6gTAdqhaF8NwVL6ksvOPqes",
+            'UMENG_APPKEY'        : '5a250addb27b0a03df000050',
+            'UMENG_MESSAGE_SECRET': '331b9fddb5458b9d9877f85af4380960',
+            'CONFIG_DIR'          : 'xycp3'
+    ]
+    cp500500 = [
+            "applicationId"       : 'com.cp.cp500500',
+            "CODE_PUSH_KEY"       : "147CfrehWZ4BVUSVXlmToZrJPBlM6ksvOPqes",
+            'UMENG_APPKEY'        : '5a2510a0f43e4836c900000f',
+            'UMENG_MESSAGE_SECRET': '991e306233990f0f87ba413178f47391',
+            'CONFIG_DIR'          : 'cp500500'
+    ]
+    cp99x2 = [
+            "applicationId"       : 'com.cp.cp99x2',
+            "CODE_PUSH_KEY"       : "cMVrV313vEnpPbxhqcxD7TRPC2ZR6ksvOPqes",
+            'UMENG_APPKEY'        : '5a30ecdba40fa343fb0000ef',
+            'UMENG_MESSAGE_SECRET': 'a8c784f3908d9788755e7861d3af5168',
+            'CONFIG_DIR'          : 'cp99x2'
+    ]
+    cp500x5 = [
+            "applicationId"       : 'com.cp.cp500x5',
+            "CODE_PUSH_KEY"       : "QDiSRE9nyIEq2dVPPXweA6KlmPav6ksvOPqes",
+            'UMENG_APPKEY'        : '5a352c798f4a9d3bf4000f07',
+            'UMENG_MESSAGE_SECRET': 'debd7bc26a0b426fa1fb7655b10a8c41',
+            'CONFIG_DIR'          : 'cp500x5'
+    ]
+    k3cp = [
+            "applicationId"       : 'com.cp.k3cp',
+            "CODE_PUSH_KEY"       : "HdGTC2wDnz0zBmkOEgjQkOAzsgQC6ksvOPqes",
+            'UMENG_APPKEY'        : '5a39277ff43e481591000282',
+            'UMENG_MESSAGE_SECRET': '9b23711bd5eb8db7ea6ca59840f155fc',
+            'CONFIG_DIR'          : 'k3cp'
+    ]
+    c8800 = [
+            "applicationId"       : 'com.cp.c8800',
+            "CODE_PUSH_KEY"       : "gMtQLwkiQgwBfYHalSY2fX8YvJ6J6ksvOPqes",
+            'UMENG_APPKEY'        : '5a40a541f29d985cc900000c',
+            'UMENG_MESSAGE_SECRET': 'c1dc5dd5ef1d33d5824d51a6cbedea01',
+            'CONFIG_DIR'          : 'c8800'
+    ]
+    jingcai = [
+            "applicationId"       : 'com.cp.jingcai',
+            "CODE_PUSH_KEY"       : "VRulzgJythqrVDKJXCyjauBIEOpk6ksvOPqes",
+            'UMENG_APPKEY'        : '5a546930a40fa37d95000119',
+            'UMENG_MESSAGE_SECRET': 'bbb85fe8e60fda36e2992f06edd7bb2a',
+            'CONFIG_DIR'          : 'jingcai'
+    ]
+    cp500w5 = [
+            "applicationId"       : 'com.cp.cp500w5',
+            "CODE_PUSH_KEY"       : "GOJBY0mW1tB54D9wt3tjv5aD3vyN6ksvOPqes",
+            'UMENG_APPKEY'        : '5a548ef3f43e483c0f0000a6',
+            'UMENG_MESSAGE_SECRET': '9103a17917fa393c4a931b49e28dfabe',
+            'CONFIG_DIR'          : 'cp500w5'
+    ]
+    cp3a = [
+            "applicationId"       : 'com.cp.cp3a',
+            "CODE_PUSH_KEY"       : "YUpuwXC5cKBHsWZJhORlOYo25k4T6ksvOPqes",
+            'UMENG_APPKEY'        : '5a69a35df29d9834c2000154',
+            'UMENG_MESSAGE_SECRET': 'a44f684805fd81cfc1dbbfe8c7b7ca19',
+            'CONFIG_DIR'          : 'cp3a'
+    ]
+    aitou = [
+            "applicationId"       : 'com.cp.aitou',
+            "CODE_PUSH_KEY"       : "ri2CSeTlAI3lm49rFaC0zAxs1xPf6ksvOPqes",
+            'UMENG_APPKEY'        : '5a69a5b5f43e48082600001b',
+            'UMENG_MESSAGE_SECRET': '601719be3cf87c21e86295503ad66f7c',
+            'CONFIG_DIR'          : 'aitou'
+    ]
+    dayingjia5 = [
+            "applicationId"       : 'com.cp.dayingjia5',
+            "CODE_PUSH_KEY"       : "yBc7a1x1YcMM6yV93PlKbVVgkiT16ksvOPqes",
+            'UMENG_APPKEY'        : '5a69a895a40fa328a40001b1',
+            'UMENG_MESSAGE_SECRET': '3d198a77da1dc93a3f822cfc163782be',
+            'CONFIG_DIR'          : 'dayingjia5'
+    ]
+    cp777 = [
+            "applicationId"       : 'com.cp.cp777',
+            "CODE_PUSH_KEY"       : "IOHFOB8J5GvyPrKFUsNhCR2el37Z6ksvOPqes",
+            'UMENG_APPKEY'        : '5a7baeb9a40fa34d78000149',
+            'UMENG_MESSAGE_SECRET': '42f4c162865ac14970b0556987411fc0',
+            'CONFIG_DIR'          : 'cp777'
+    ]
+    fhcp = [
+            "applicationId"       : 'com.cp.fhcp',
+            "CODE_PUSH_KEY"       : "JWoMazwCJCCqUO7m0n4HkRgKgZB96ksvOPqes",
+            'UMENG_APPKEY'        : '5a7bb592b27b0a7fef000052',
+            'UMENG_MESSAGE_SECRET': 'c995210ef53a0c3b1d1bf190086e2714',
+            'CONFIG_DIR'          : 'fhcp'
+    ]
+    liucai = [
+            "applicationId"       : 'com.cp.liucai',
+            "CODE_PUSH_KEY"       : "NuWVt3quImGb8ICpbHraukiO9Fod6ksvOPqes",
+            'UMENG_APPKEY'        : '5a7bb55f8f4a9d4f12000081',
+            'UMENG_MESSAGE_SECRET': '710638992a6406f03630a916bee5ed2c',
+            'CONFIG_DIR'          : 'liucai'
+    ]
+    cp33dg = [
+            "applicationId"       : 'com.cp.cp33dg',
+            "CODE_PUSH_KEY"       : "ObhZpP0begxFTpEdAiJNSgusf9jZ6ksvOPqes",
+            'UMENG_APPKEY'        : '5a9acbfcf43e4876a200000c',
+            'UMENG_MESSAGE_SECRET': '3a11d2a4e859dfdb6552695f713cb3af',
+            'CONFIG_DIR'          : 'cp33dg'
+    ]
+}

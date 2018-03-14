@@ -1,0 +1,1447 @@
+apply plugin: "com.android.application"
+apply plugin: 'walle'
+
+import com.android.build.OutputFile
+
+/**
+ * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
+ * and bundleReleaseJsAndAssets).
+ * These basically call `react-native bundle` with the correct arguments during the Android build
+ * cycle. By default, bundleDebugJsAndAssets is skipped, as in debug/dev mode we prefer to load the
+ * bundle directly from the development server. Below you can see all the possible configurations
+ * and their defaults. If you decide to add a configuration block, make sure to add it before the
+ * `apply from: "../../node_modules/react-native/react.gradle"` line.
+ *
+ * project.ext.react = [
+ *   // the name of the generated asset file containing your JS bundle
+ *   bundleAssetName: "index.android.bundle",
+ *
+ *   // the entry file for bundle generation
+ *   entryFile: "index.android.js",
+ *
+ *   // whether to bundle JS and assets in debug mode
+ *   bundleInDebug: false,
+ *
+ *   // whether to bundle JS and assets in release mode
+ *   bundleInRelease: true,
+ *
+ *   // whether to bundle JS and assets in another build variant (if configured).
+ *   // See http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Build-Variants
+ *   // The configuration property can be in the following formats
+ *   //         'bundleIn${productFlavor}${buildType}'
+ *   //         'bundleIn${buildType}'
+ *   // bundleInFreeDebug: true,
+ *   // bundleInPaidRelease: true,
+ *   // bundleInBeta: true,
+ *
+ *   // the root of your project, i.e. where "package.json" lives
+ *   root: "../../",
+ *
+ *   // where to put the JS bundle asset in debug mode
+ *   jsBundleDirDebug: "$buildDir/intermediates/assets/debug",
+ *
+ *   // where to put the JS bundle asset in release mode
+ *   jsBundleDirRelease: "$buildDir/intermediates/assets/release",
+ *
+ *   // where to put drawable resources / React Native assets, e.g. the ones you use via
+ *   // require('./image.png')), in debug mode
+ *   resourcesDirDebug: "$buildDir/intermediates/res/merged/debug",
+ *
+ *   // where to put drawable resources / React Native assets, e.g. the ones you use via
+ *   // require('./image.png')), in release mode
+ *   resourcesDirRelease: "$buildDir/intermediates/res/merged/release",
+ *
+ *   // by default the gradle tasks are skipped if none of the JS files or assets change; this means
+ *   // that we don't look at files in android/ or ios/ to determine whether the tasks are up to
+ *   // date; if you have any other folders that you want to ignore for performance reasons (gradle
+ *   // indexes the entire tree), add them here. Alternatively, if you have JS files in android/
+ *   // for example, you might want to remove it from here.
+ *   inputExcludes: ["android/**", "ios/**"],
+ *
+ *   // override which node gets called and with what additional arguments
+ *   nodeExecutableAndArgs: ["node"]
+ *
+ *   // supply additional arguments to the packager
+ *   extraPackagerArgs: []
+ * ]
+ */
+
+apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
+
+/**
+ * Set this to true to create two separate APKs instead of one:
+ *   - An APK that only works on ARM devices
+ *   - An APK that only works on x86 devices
+ * The advantage is the size of the APK is reduced by about 4MB.
+ * Upload all the APKs to the Play Store and people will download
+ * the correct one based on the CPU architecture of their device.
+ */
+def enableSeparateBuildPerCPUArchitecture = false
+
+/**
+ * Run Proguard to shrink the Java bytecode in release builds.
+ */
+def enableProguardInReleaseBuilds = false
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion '23.0.2'
+
+    defaultConfig {
+        applicationId "com.hatsune"
+        minSdkVersion 16
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0.0"
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
+    }
+    signingConfigs {
+        release {
+            storeFile file(MYAPP_RELEASE_STORE_FILE)
+            storePassword MYAPP_RELEASE_STORE_PASSWORD
+            keyAlias MYAPP_RELEASE_KEY_ALIAS
+            keyPassword MYAPP_RELEASE_KEY_PASSWORD
+        }
+    }
+    splits {
+        abi {
+            reset()
+            enable enableSeparateBuildPerCPUArchitecture
+            universalApk false  // If true, also generate a universal APK
+            include "armeabi-v7a", "x86"
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
+        }
+    }
+    // applicationVariants are e.g. debug, release
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            // For each separate APK per architecture, set a unique version code as described here:
+            // http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits
+            def versionCodes = ["armeabi-v7a": 1, "x86": 2]
+            def abi = output.getFilter(OutputFile.ABI)
+            if (abi != null) {  // null for the universal-debug, universal-release variants
+                output.versionCodeOverride =
+                        versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
+            }
+        }
+    }
+
+    productFlavors {
+        hatsunetest {
+            applicationId rootProject.ext.test.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.test.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.test.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.test.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.test.UMENG_MESSAGE_SECRET
+            ]
+        }
+        kosun {
+            applicationId rootProject.ext.test.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.kosun.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.kosun.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.kosun.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.kosun.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp899 {
+            applicationId rootProject.ext.cp899.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp899.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp899.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp899.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp899.UMENG_MESSAGE_SECRET
+            ]
+        }
+        c9 {
+            applicationId rootProject.ext.c9.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.c9.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.c9.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.c9.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.c9.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cpcp {
+            applicationId rootProject.ext.cpcp.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cpcp.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cpcp.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cpcp.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cpcp.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp111 {
+            applicationId rootProject.ext.cp111.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp111.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp111.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp111.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp111.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp500y {
+            applicationId rootProject.ext.cp500y.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp500y.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp500y.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp500y.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp500y.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp500 {
+            applicationId rootProject.ext.cp500.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp500.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp500.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp500.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp500.UMENG_MESSAGE_SECRET
+            ]
+        }
+        duocai {
+            applicationId rootProject.ext.duocai.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.duocai.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.duocai.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.duocai.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.duocai.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp7070 {
+            applicationId rootProject.ext.cp7070.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp7070.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp7070.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp7070.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp7070.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp555 {
+            applicationId rootProject.ext.cp555.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp555.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp555.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp555.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp555.UMENG_MESSAGE_SECRET
+            ]
+        }
+        tcw {
+            applicationId rootProject.ext.tcw.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.tcw.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.tcw.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.tcw.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.tcw.UMENG_MESSAGE_SECRET
+            ]
+        }
+        yccp {
+            applicationId rootProject.ext.yccp.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.yccp.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.yccp.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.yccp.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.yccp.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp500w {
+            applicationId rootProject.ext.cp500w.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp500w.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp500w.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp500w.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp500w.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp8888 {
+            applicationId rootProject.ext.cp8888.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp8888.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp8888.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp8888.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp8888.UMENG_MESSAGE_SECRET
+            ]
+        }
+        lccp {
+            applicationId rootProject.ext.lccp.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.lccp.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.lccp.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.lccp.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.lccp.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp88 {
+            applicationId rootProject.ext.cp88.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp88.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp88.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp88.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp88.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp361 {
+            applicationId rootProject.ext.cp361.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp361.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp361.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp361.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp361.UMENG_MESSAGE_SECRET
+            ]
+        }
+        c02 {
+            applicationId rootProject.ext.c02.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.c02.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.c02.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.c02.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.c02.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp99 {
+            applicationId rootProject.ext.cp99.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp99.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp99.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp99.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp99.UMENG_MESSAGE_SECRET
+            ]
+        }
+        c29 {
+            applicationId rootProject.ext.c29.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.c29.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.c29.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.c29.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.c29.UMENG_MESSAGE_SECRET
+            ]
+        }
+        yicaicp {
+            applicationId rootProject.ext.yicaicp.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.yicaicp.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.yicaicp.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.yicaicp.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.yicaicp.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp500w2 {
+            applicationId rootProject.ext.cp500w2.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp500w2.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp500w2.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp500w2.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp500w2.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp500w3 {
+            applicationId rootProject.ext.cp500w3.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp500w3.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp500w3.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp500w3.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp500w3.UMENG_MESSAGE_SECRET
+            ]
+        }
+        ssc {
+            applicationId rootProject.ext.ssc.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.ssc.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.ssc.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.ssc.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.ssc.UMENG_MESSAGE_SECRET
+            ]
+        }
+        xyc {
+            applicationId rootProject.ext.xyc.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.xyc.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.xyc.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.xyc.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.xyc.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp9a {
+            applicationId rootProject.ext.cp9a.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp9a.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp9a.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp9a.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp9a.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp336 {
+            applicationId rootProject.ext.cp336.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp336.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp336.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp336.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp336.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp500x2 {
+            applicationId rootProject.ext.cp500x2.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp500x2.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp500x2.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp500x2.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp500x2.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp500x3 {
+            applicationId rootProject.ext.cp500x3.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp500x3.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp500x3.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp500x3.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp500x3.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp500x4 {
+            applicationId rootProject.ext.cp500x4.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp500x4.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp500x4.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp500x4.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp500x4.UMENG_MESSAGE_SECRET
+            ]
+        }
+        shunfengcp {
+            applicationId rootProject.ext.shunfengcp.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.shunfengcp.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.shunfengcp.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.shunfengcp.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.shunfengcp.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp361x2 {
+            applicationId rootProject.ext.cp361x2.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp361x2.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp361x2.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp361x2.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp361x2.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp1516 {
+            applicationId rootProject.ext.cp1516.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp1516.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp1516.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp1516.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp1516.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp916 {
+            applicationId rootProject.ext.cp916.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp916.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp916.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp916.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp916.UMENG_MESSAGE_SECRET
+            ]
+        }
+        c81 {
+            applicationId rootProject.ext.c81.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.c81.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.c81.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.c81.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.c81.UMENG_MESSAGE_SECRET
+            ]
+        }
+        wmcp {
+            applicationId rootProject.ext.wmcp.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.wmcp.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.wmcp.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.wmcp.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.wmcp.UMENG_MESSAGE_SECRET
+            ]
+        }
+        shunfengcp3 {
+            applicationId rootProject.ext.shunfengcp3.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.shunfengcp3.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.shunfengcp3.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.shunfengcp3.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.shunfengcp3.UMENG_MESSAGE_SECRET
+            ]
+        }
+        zcp {
+            applicationId rootProject.ext.zcp.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.zcp.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.zcp.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.zcp.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.zcp.UMENG_MESSAGE_SECRET
+            ]
+        }
+        c222 {
+            applicationId rootProject.ext.c222.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.c222.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.c222.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.c222.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.c222.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp5050 {
+            applicationId rootProject.ext.cp5050.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp5050.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp5050.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp5050.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp5050.UMENG_MESSAGE_SECRET
+            ]
+        }
+        zgc {
+            applicationId rootProject.ext.zgc.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.zgc.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.zgc.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.zgc.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.zgc.UMENG_MESSAGE_SECRET
+            ]
+        }
+        dfc {
+            applicationId rootProject.ext.dfc.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.dfc.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.dfc.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.dfc.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.dfc.UMENG_MESSAGE_SECRET
+            ]
+        }
+        xyc3 {
+            applicationId rootProject.ext.xyc3.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.xyc3.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.xyc3.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.xyc3.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.xyc3.UMENG_MESSAGE_SECRET
+            ]
+        }
+        ncw {
+            applicationId rootProject.ext.ncw.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.ncw.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.ncw.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.ncw.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.ncw.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp29x2 {
+            applicationId rootProject.ext.cp29x2.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp29x2.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp29x2.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp29x2.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp29x2.UMENG_MESSAGE_SECRET
+            ]
+        }
+        c6 {
+            applicationId rootProject.ext.c6.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.c6.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.c6.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.c6.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.c6.UMENG_MESSAGE_SECRET
+            ]
+        }
+        wfccp {
+            applicationId rootProject.ext.wfccp.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.wfccp.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.wfccp.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.wfccp.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.wfccp.UMENG_MESSAGE_SECRET
+            ]
+        }
+        xycp2 {
+            applicationId rootProject.ext.xycp2.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.xycp2.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.xycp2.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.xycp2.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.xycp2.UMENG_MESSAGE_SECRET
+            ]
+        }
+        bycpw {
+            applicationId rootProject.ext.bycpw.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.bycpw.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.bycpw.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.bycpw.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.bycpw.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp7c {
+            applicationId rootProject.ext.cp7c.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp7c.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp7c.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp7c.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp7c.UMENG_MESSAGE_SECRET
+            ]
+        }
+        c36 {
+            applicationId rootProject.ext.c36.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.c36.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.c36.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.c36.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.c36.UMENG_MESSAGE_SECRET
+            ]
+        }
+        c48 {
+            applicationId rootProject.ext.c48.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.c48.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.c48.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.c48.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.c48.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp703 {
+            applicationId rootProject.ext.cp703.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp703.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp703.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp703.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp703.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cpbw {
+            applicationId rootProject.ext.cpbw.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cpbw.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cpbw.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cpbw.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cpbw.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp500w4 {
+            applicationId rootProject.ext.cp500w4.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp500w4.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp500w4.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp500w4.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp500w4.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp1216 {
+            applicationId rootProject.ext.cp1216.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp1216.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp1216.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp1216.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp1216.UMENG_MESSAGE_SECRET
+            ]
+        }
+        aicai {
+            applicationId rootProject.ext.aicai.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.aicai.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.aicai.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.aicai.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.aicai.UMENG_MESSAGE_SECRET
+            ]
+        }
+        zcw {
+            applicationId rootProject.ext.zcw.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.zcw.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.zcw.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.zcw.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.zcw.UMENG_MESSAGE_SECRET
+            ]
+        }
+        c45 {
+            applicationId rootProject.ext.c45.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.c45.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.c45.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.c45.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.c45.UMENG_MESSAGE_SECRET
+            ]
+        }
+        lequcai {
+            applicationId rootProject.ext.lequcai.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.lequcai.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.lequcai.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.lequcai.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.lequcai.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp3hao {
+            applicationId rootProject.ext.cp3hao.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp3hao.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp3hao.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp3hao.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp3hao.UMENG_MESSAGE_SECRET
+            ]
+        }
+        dayingjia2 {
+            applicationId rootProject.ext.dayingjia2.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.dayingjia2.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.dayingjia2.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.dayingjia2.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.dayingjia2.UMENG_MESSAGE_SECRET
+            ]
+        }
+        fuxingcai {
+            applicationId rootProject.ext.fuxingcai.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.fuxingcai.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.fuxingcai.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.fuxingcai.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.fuxingcai.UMENG_MESSAGE_SECRET
+            ]
+        }
+        juxingcai {
+            applicationId rootProject.ext.juxingcai.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.juxingcai.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.juxingcai.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.juxingcai.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.juxingcai.UMENG_MESSAGE_SECRET
+            ]
+        }
+        dayingjia {
+            applicationId rootProject.ext.dayingjia.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.dayingjia.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.dayingjia.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.dayingjia.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.dayingjia.UMENG_MESSAGE_SECRET
+            ]
+        }
+        dayingjia3 {
+            applicationId rootProject.ext.dayingjia3.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.dayingjia3.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.dayingjia3.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.dayingjia3.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.dayingjia3.UMENG_MESSAGE_SECRET
+            ]
+        }
+        c899 {
+            applicationId rootProject.ext.c899.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.c899.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.c899.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.c899.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.c899.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp188 {
+            applicationId rootProject.ext.cp188.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp188.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp188.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp188.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp188.UMENG_MESSAGE_SECRET
+            ]
+        }
+        diyicaipiao {
+            applicationId rootProject.ext.diyicaipiao.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.diyicaipiao.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.diyicaipiao.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.diyicaipiao.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.diyicaipiao.UMENG_MESSAGE_SECRET
+            ]
+        }
+        dayingjia4 {
+            applicationId rootProject.ext.dayingjia4.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.dayingjia4.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.dayingjia4.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.dayingjia4.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.dayingjia4.UMENG_MESSAGE_SECRET
+            ]
+        }
+        c76 {
+            applicationId rootProject.ext.c76.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.c76.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.c76.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.c76.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.c76.UMENG_MESSAGE_SECRET
+            ]
+        }
+        aicai2 {
+            applicationId rootProject.ext.aicai2.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.aicai2.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.aicai2.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.aicai2.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.aicai2.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp588 {
+            applicationId rootProject.ext.cp588.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp588.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp588.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp588.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp588.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp55 {
+            applicationId rootProject.ext.cp55.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp55.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp55.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp55.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp55.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp9 {
+            applicationId rootProject.ext.cp9.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp9.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp9.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp9.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp9.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp688 {
+            applicationId rootProject.ext.cp688.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp688.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp688.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp688.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp688.UMENG_MESSAGE_SECRET
+            ]
+        }
+        gaoxingcp {
+            applicationId rootProject.ext.gaoxingcp.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.gaoxingcp.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.gaoxingcp.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.gaoxingcp.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.gaoxingcp.UMENG_MESSAGE_SECRET
+            ]
+        }
+        feature1 {
+            applicationId rootProject.ext.feature1.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.feature1.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.feature1.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.feature1.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.feature1.UMENG_MESSAGE_SECRET
+            ]
+        }
+        feature4 {
+            applicationId rootProject.ext.feature4.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.feature4.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.feature4.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.feature4.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.feature4.UMENG_MESSAGE_SECRET
+            ]
+        }
+        xycp3 {
+            applicationId rootProject.ext.xycp3.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.xycp3.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.xycp3.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.xycp3.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.xycp3.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp500500 {
+            applicationId rootProject.ext.cp500500.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp500500.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp500500.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp500500.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp500500.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp99x2 {
+            applicationId rootProject.ext.cp99x2.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp99x2.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp99x2.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp99x2.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp99x2.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp500x5 {
+            applicationId rootProject.ext.cp500x5.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp500x5.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp500x5.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp500x5.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp500x5.UMENG_MESSAGE_SECRET
+            ]
+        }
+        k3cp {
+            applicationId rootProject.ext.k3cp.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.k3cp.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.k3cp.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.k3cp.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.k3cp.UMENG_MESSAGE_SECRET
+            ]
+        }
+        c8800 {
+            applicationId rootProject.ext.c8800.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.c8800.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.c8800.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.c8800.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.c8800.UMENG_MESSAGE_SECRET
+            ]
+        }
+        jingcai {
+            applicationId rootProject.ext.jingcai.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.jingcai.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.jingcai.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.jingcai.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.jingcai.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp500w5 {
+            applicationId rootProject.ext.cp500w5.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp500w5.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp500w5.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp500w5.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp500w5.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp3a {
+            applicationId rootProject.ext.cp3a.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp3a.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp3a.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp3a.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp3a.UMENG_MESSAGE_SECRET
+            ]
+        }
+        aitou {
+            applicationId rootProject.ext.aitou.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.aitou.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.aitou.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.aitou.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.aitou.UMENG_MESSAGE_SECRET
+            ]
+        }
+        dayingjia5 {
+            applicationId rootProject.ext.dayingjia5.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.dayingjia5.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.dayingjia5.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.dayingjia5.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.dayingjia5.UMENG_MESSAGE_SECRET
+            ]
+        }
+        stable {
+            applicationId rootProject.ext.stable.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.stable.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.stable.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.stable.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.stable.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp777 {
+            applicationId rootProject.ext.cp777.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp777.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp777.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.cp777.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.cp777.UMENG_MESSAGE_SECRET
+            ]
+        }
+        fhcp {
+            applicationId rootProject.ext.fhcp.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.fhcp.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.fhcp.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.fhcp.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.fhcp.UMENG_MESSAGE_SECRET
+            ]
+        }
+        liucai {
+            applicationId rootProject.ext.liucai.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.liucai.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.liucai.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.liucai.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.liucai.UMENG_MESSAGE_SECRET
+            ]
+        }
+        cp33dg {
+            applicationId rootProject.ext.cp33dg.applicationId
+            buildConfigField "String", "CODE_PUSH_KEY", "\"" + rootProject.ext.cp33dg.CODE_PUSH_KEY + "\""
+            buildConfigField "String", "UMENG_APPKEY", "\"" + rootProject.ext.cp33dg.UMENG_APPKEY + "\""
+            manifestPlaceholders = [
+                    'UMENG_APPKEY'        : rootProject.ext.liucai.UMENG_APPKEY,
+                    'UMENG_MESSAGE_SECRET': rootProject.ext.liucai.UMENG_MESSAGE_SECRET
+            ]
+        }
+    }
+}
+
+dependencies {
+    compile 'com.squareup.okhttp3:okhttp:3.4.2'
+    compile 'com.squareup.okhttp3:okhttp-urlconnection:3.4.2'
+    compile 'com.squareup.okhttp3:okhttp-ws:3.4.2'
+
+    compile 'com.meituan.android.walle:library:1.1.5'
+    compile project(':react-native-umeng-push')
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    compile project(':react-native-sound')
+    compile project(':react-native-fetch-blob')
+    compile project(':react-native-keychain')
+    compile project(':react-native-fs')
+    compile project(':react-native-shake-event')
+    compile project(':react-native-device-info')
+    compile project(':react-native-code-push')
+    compile 'com.facebook.fresco:animated-webp:0.11.0'
+    compile 'com.facebook.fresco:webpsupport:0.11.0'
+    compile 'com.facebook.fresco:animated-gif:0.13.0'
+    compile project(':PushSDK') //????
+    compile fileTree(dir: "libs", include: ["*.jar"])
+    compile "com.android.support:appcompat-v7:23.4.0"
+    compile project(':ReactAndroid')
+//    compile "com.facebook.react:react-native:+"  // From node_modules
+}
+
+walle {
+    // 指定渠道包的输出路径
+    apkOutputFolder = new File("${project.buildDir}/outputs/channels");
+    // 定制渠道包的APK的文件名称
+    apkFileNameFormat = '${appName}-${packageName}-${channel}-${buildType}-v${versionName}-${versionCode}-${buildTime}.apk';
+    // 渠道配置文件
+    channelFile = new File("${project.getProjectDir()}/channel")
+}
+
+// Run this once to be able to run the application with BUCK
+// puts all compile dependencies into folder libs for BUCK to use
+task copyDownloadableDepsToLibs(type: Copy) {
+    from configurations.compile
+    into 'libs'
+}
+
+configurations.all {
+    exclude group: 'com.facebook.react', module: 'react-native'
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name ==~ /bundleHatsunetestRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("test")
+        }
+    } else if (task.name ==~ /bundleKosunRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("kosun")
+        }
+    } else if (task.name ==~ /bundleCp899Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp899")
+        }
+    } else if (task.name ==~ /bundleC9Release.*/) {
+        task.doFirst() {
+            copyConfigFile("c9")
+        }
+    } else if (task.name ==~ /bundleCpcpRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("cpcp")
+        }
+    } else if (task.name ==~ /bundleCp111Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp111")
+        }
+    } else if (task.name ==~ /bundleCp500yRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("cp500y")
+        }
+    } else if (task.name ==~ /bundleCp500Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp500")
+        }
+    } else if (task.name ==~ /bundleDuocaiRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("duocai")
+        }
+    } else if (task.name ==~ /bundleCp7070Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp7070")
+        }
+    } else if (task.name ==~ /bundleCp555Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp555")
+        }
+    } else if (task.name ==~ /bundleTcwRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("tcw")
+        }
+    } else if (task.name ==~ /bundleYccpRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("yccp")
+        }
+    } else if (task.name ==~ /bundleCp500wRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("cp500w")
+        }
+    } else if (task.name ==~ /bundleCp8888Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp8888")
+        }
+    } else if (task.name ==~ /bundleLccpRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("lccp")
+        }
+    } else if (task.name ==~ /bundleCp88Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp88")
+        }
+    } else if (task.name ==~ /bundleCp361Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp361")
+        }
+    } else if (task.name ==~ /bundleC02Release.*/) {
+        task.doFirst() {
+            copyConfigFile("c02")
+        }
+    } else if (task.name ==~ /bundleCp99Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp99")
+        }
+    } else if (task.name ==~ /bundleC29Release.*/) {
+        task.doFirst() {
+            copyConfigFile("c29")
+        }
+    } else if (task.name ==~ /bundleYicaicpRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("yicaicp")
+        }
+    } else if (task.name ==~ /bundleCp500w2Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp500w2")
+        }
+    } else if (task.name ==~ /bundleCp500w3Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp500w3")
+        }
+    } else if (task.name ==~ /bundleSscRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("ssc")
+        }
+    } else if (task.name ==~ /bundleXycRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("xyc")
+        }
+    } else if (task.name ==~ /bundleCp9aRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("cp9a")
+        }
+    } else if (task.name ==~ /bundleCp336Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp336")
+        }
+    } else if (task.name ==~ /bundleCp500x2Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp500x2")
+        }
+    } else if (task.name ==~ /bundleCp500x3Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp500x3")
+        }
+    } else if (task.name ==~ /bundleCp500x4Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp500x4")
+        }
+    } else if (task.name ==~ /bundleShunfengcpRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("shunfengcp")
+        }
+    } else if (task.name ==~ /bundleCp361x2Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp361x2")
+        }
+    } else if (task.name ==~ /bundleCp1516Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp1516")
+        }
+    } else if (task.name ==~ /bundleCp916Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp916")
+        }
+    } else if (task.name ==~ /bundleC81Release.*/) {
+        task.doFirst() {
+            copyConfigFile("c81")
+        }
+    } else if (task.name ==~ /bundleWmcpRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("wmcp")
+        }
+    } else if (task.name ==~ /bundleShunfengcp3Release.*/) {
+        task.doFirst() {
+            copyConfigFile("shunfengcp3")
+        }
+    } else if (task.name ==~ /bundleZcpRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("zcp")
+        }
+    } else if (task.name ==~ /bundleC222Release.*/) {
+        task.doFirst() {
+            copyConfigFile("c222")
+        }
+    } else if (task.name ==~ /bundleCp5050Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp5050")
+        }
+    } else if (task.name ==~ /bundleZgcRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("zgc")
+        }
+    } else if (task.name ==~ /bundleDfcRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("dfc")
+        }
+    } else if (task.name ==~ /bundleXyc3Release.*/) {
+        task.doFirst() {
+            copyConfigFile("xyc3")
+        }
+    } else if (task.name ==~ /bundleNcwRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("ncw")
+        }
+    } else if (task.name ==~ /bundleCp29x2Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp29x2")
+        }
+    } else if (task.name ==~ /bundleC6Release.*/) {
+        task.doFirst() {
+            copyConfigFile("c6")
+        }
+    } else if (task.name ==~ /bundleWfccpRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("wfccp")
+        }
+    } else if (task.name ==~ /bundleXycp2Release.*/) {
+        task.doFirst() {
+            copyConfigFile("xycp2")
+        }
+    } else if (task.name ==~ /bundleBycpwRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("bycpw")
+        }
+    } else if (task.name ==~ /bundleCp7cRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("cp7c")
+        }
+    } else if (task.name ==~ /bundleC36Release.*/) {
+        task.doFirst() {
+            copyConfigFile("c36")
+        }
+    } else if (task.name ==~ /bundleC48Release.*/) {
+        task.doFirst() {
+            copyConfigFile("c48")
+        }
+    } else if (task.name ==~ /bundleCp703Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp703")
+        }
+    } else if (task.name ==~ /bundleCpbwRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("cpbw")
+        }
+    } else if (task.name ==~ /bundleCp500w4Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp500w4")
+        }
+    } else if (task.name ==~ /bundleCp1216Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp1216")
+        }
+    } else if (task.name ==~ /bundleAicaiRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("aicai")
+        }
+    } else if (task.name ==~ /bundleZcwRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("zcw")
+        }
+    } else if (task.name ==~ /bundleC45Release.*/) {
+        task.doFirst() {
+            copyConfigFile("c45")
+        }
+    } else if (task.name ==~ /bundleLequcaiRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("lequcai")
+        }
+    } else if (task.name ==~ /bundleCp3haoRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("cp3hao")
+        }
+    } else if (task.name ==~ /bundleDayingjia2Release.*/) {
+        task.doFirst() {
+            copyConfigFile("dayingjia2")
+        }
+    } else if (task.name ==~ /bundleFuxingcaiRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("fuxingcai")
+        }
+    } else if (task.name ==~ /bundleJuxingcaiRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("juxingcai")
+        }
+    } else if (task.name ==~ /bundleDayingjiaRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("dayingjia")
+        }
+    } else if (task.name ==~ /bundleDayingjia3Release.*/) {
+        task.doFirst() {
+            copyConfigFile("dayingjia3")
+        }
+    } else if (task.name ==~ /bundleC899Release.*/) {
+        task.doFirst() {
+            copyConfigFile("c899")
+        }
+    } else if (task.name ==~ /bundleCp188Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp188")
+        }
+    } else if (task.name ==~ /bundleDiyicaipiaoRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("diyicaipiao")
+        }
+    } else if (task.name ==~ /bundleDayingjia4Release.*/) {
+        task.doFirst() {
+            copyConfigFile("dayingjia4")
+        }
+    } else if (task.name ==~ /bundleC76Release.*/) {
+        task.doFirst() {
+            copyConfigFile("c76")
+        }
+    } else if (task.name ==~ /bundleAicai2Release.*/) {
+        task.doFirst() {
+            copyConfigFile("aicai2")
+        }
+    } else if (task.name ==~ /bundleCp588Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp588")
+        }
+    } else if (task.name ==~ /bundleCp55Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp55")
+        }
+    } else if (task.name ==~ /bundleCp9Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp9")
+        }
+    } else if (task.name ==~ /bundleCp688Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp688")
+        }
+    } else if (task.name ==~ /bundleGaoxingcpRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("gaoxingcp")
+        }
+    } else if (task.name ==~ /bundleFeature1Release.*/) {
+        task.doFirst() {
+            copyConfigFile("feature1")
+        }
+    } else if (task.name ==~ /bundleFeature4Release.*/) {
+        task.doFirst() {
+            copyConfigFile("feature4")
+        }
+    } else if (task.name ==~ /bundleXycp3Release.*/) {
+        task.doFirst() {
+            copyConfigFile("xycp3")
+        }
+    } else if (task.name ==~ /bundleCp500500Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp500500")
+        }
+    } else if (task.name ==~ /bundleCp99x2Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp99x2")
+        }
+    } else if (task.name ==~ /bundleCp500x5Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp500x5")
+        }
+    } else if (task.name ==~ /bundleK3cpRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("k3cp")
+        }
+    } else if (task.name ==~ /bundleC8800Release.*/) {
+        task.doFirst() {
+            copyConfigFile("c8800")
+        }
+    } else if (task.name ==~ /bundleJingcaiRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("jingcai")
+        }
+    } else if (task.name ==~ /bundleCp500w5Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp500w5")
+        }
+    } else if (task.name ==~ /bundleCp3aRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("cp3a")
+        }
+    } else if (task.name ==~ /bundleAitouRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("aitou")
+        }
+    } else if (task.name ==~ /bundleDayingjia5Release.*/) {
+        task.doFirst() {
+            copyConfigFile("dayingjia5")
+        }
+    } else if (task.name ==~ /bundleStableRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("stable")
+        }
+    } else if (task.name ==~ /bundleCp777Release.*/) {
+        task.doFirst() {
+            copyConfigFile("cp777")
+        }
+    } else if (task.name ==~ /bundleLiucaiRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("liucai")
+        }
+    } else if (task.name ==~ /bundleFhcpRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("fhcp")
+        }
+    } else if (task.name ==~ /bundleCp33dgRelease.*/) {
+        task.doFirst() {
+            copyConfigFile("cp33dg")
+        }
+    }
+}
+
+def copyConfigFile(flavorName) {
+    println ">:Start Copy Config File..."
+    copy {
+        delete fileTree(dir: rootProject.ext.global.CONFIG_DIST_DIR)
+        from rootProject.ext.global.CONFIG_SOURCE_DIR + rootProject.ext[flavorName].CONFIG_DIR
+        into rootProject.ext.global.CONFIG_DIST_DIR
+        include '**'
+    }
+}
